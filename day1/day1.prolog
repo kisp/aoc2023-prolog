@@ -1,10 +1,5 @@
 :- set_prolog_flag(double_quotes, chars).
 
-... --> [] | [_], ... .
-
-seq([]) --> [].
-seq([H|T]) --> [H], seq(T).
-
 digit(_,1) --> "1". digit(_,2) --> "2". digit(_,3) --> "3". digit(_,4) --> "4". digit(_,5) --> "5".
 digit(_,6) --> "6". digit(_,7) --> "7". digit(_,8) --> "8". digit(_,9) --> "9".
 
@@ -12,36 +7,25 @@ digit(partB,1) --> "one". digit(partB,2) --> "two". digit(partB,3) --> "three".
 digit(partB,4) --> "four". digit(partB,5) --> "five". digit(partB,6) --> "six".
 digit(partB,7) --> "seven". digit(partB,8) --> "eight". digit(partB,9) --> "nine".
 
-nondigits(P) --> seq(S), { \+ phrase((..., digit(P, _), ...), S) }.
-
-firstDigit(P, D) --> nondigits(P), digit(P, D), ... .
-lastDigit(P, D) --> ..., digit(P, D), nondigits(P).
-
-%% lineValue(P, L, X) :-
-%%   phrase(firstDigit(P, A), L),
-%%   phrase(lastDigit(P, Z), L),
-%%   X #= A * 10 + Z.
-
 sumFirstLast(Ds, S) :-
   [First|_] = Ds,
   reverse(Ds, Ds1),
   [Last|_] = Ds1,
   S #= First * 10 + Last.
 
-lineValue(P, L, X) :-
-  findall(D, phrase((..., digit(P, D), ...), L), Ds),
+... --> [] | [_], ... .
+
+lineValue(Part, L, X) :-
+  findall(D, phrase((..., digit(Part, D), ...), L), Ds),
   sumFirstLast(Ds, X).
 
 sum([], 0).
-sum([H|T], X) :-
-  sum(T, X1),
-  X #= H + X1.
+sum([H|T], S) :-
+  sum(T, S1),
+  S #= H + S1.
 
-docValues(P, Doc, Xs) :-
-  findall(X, (call(Doc, L), once(lineValue(P, L, X))), Xs).
-
-docSum(P, Doc, S) :-
-  docValues(P, Doc, Xs),
+docSum(Part, Doc, S) :-
+  findall(X, (call(Doc, L), once(lineValue(Part, L, X))), Xs),
   sum(Xs, S).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
