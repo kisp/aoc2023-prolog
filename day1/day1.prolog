@@ -1,5 +1,8 @@
 :- set_prolog_flag(double_quotes, chars).
 
+%% $ gprolog --version
+%% Prolog top-Level (GNU Prolog) 1.5.0
+
 digit(_,1) --> "1". digit(_,2) --> "2". digit(_,3) --> "3". digit(_,4) --> "4". digit(_,5) --> "5".
 digit(_,6) --> "6". digit(_,7) --> "7". digit(_,8) --> "8". digit(_,9) --> "9".
 
